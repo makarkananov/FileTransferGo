@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package api;
+
+import "validate/validate.proto";
+
+option go_package = "../api";
+
+service FileTransfer {
+  rpc GetFileList (FileListRequest) returns (FileListResponse);
+  rpc GetFileInfo (FileInfoRequest) returns (FileInfoResponse);
+  rpc GetFileContent (FileInfoRequest) returns (FileContentResponse);
+}
+
+message FileListRequest {}
+
+message FileListResponse {
+  repeated string files = 1 [(validate.rules).repeated.items.string.min_len = 1];
+}
+
+message FileInfoRequest {
+  string filename = 1 [(validate.rules).string.min_len = 1];
+}
+
+message FileInfoResponse {
+  string filename = 1 [(validate.rules).string.min_len = 1];
+  uint64 size = 2;
+}
+
+message FileContentResponse {
+  string filename = 1 [(validate.rules).string.min_len = 1];
+  bytes content = 2;
+}
